@@ -2,43 +2,104 @@
     margin : 0;
     padding: 0;
     box-sizing: border-box;
+    --shadow : 0 2px 4px;
+    --color : antiquewhite;
 }
 
-form {
+.wrapper {
+    display: grid;
+    grid-template-rows: 75px 1fr 30px;
+}
+
+:not(.menu){
+    background-color: blue;
+}
+
+.open-form {
+    position: fixed;
+    right: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: solid 1px;
+    background-color: var(--color);
+    box-shadow: var(--shadow);
+    transition: all 350ms;
+    background-color: --color;
+}
+.open-form:hover {
+    opacity: 0.8;
+}
+.open-form:active {
+    box-shadow: none;
+}
+
+form.add-book {
+    z-index: 2;
+    width: 300px;
+    position: fixed;
+    left: calc(50vw - 150px);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    opacity: 1;
+    transform: scale(0);
+    transition: all 350ms;
+}
+form input {
+    display: block;
+}
+
+.main{
+    position: relative;
 }
 
 .display {
     display: grid;
     margin: 10px;
-    grid-template-columns: repeat(auto-fit, 180px);
-    grid-auto-rows: 200px;
+    grid-template-columns: repeat(auto-fit, 200px);
+    grid-auto-rows: 300px;
     gap: 10px;
 }
 
-[class^='card'] {
-    font-size: 18px;
+.card {
+    font-size: 15px;
     text-align: center;
-    width: 180px;
-    background-color: antiquewhite;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px;
+    width: 200px;
+    background-color: --color;
+    border-radius: 3px;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     position: relative;
 }
-[class^='card'] span {
+
+.card textarea {
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    border: 0;
+    text-align: center;
+    width: 190px;
+    height: 3.5em;
+    resize: none;
+    overflow: hidden;
+}
+
+.card .inpTitle {
+    font-size: 30px;
+}
+
+.card span {
     margin: 5px;
     font-size: 12px;
 }
-button[class^='read'] {
+button.read {
     right: 30px;
 }
-[class^='card'] button {
+.card button {
     position: absolute;
     bottom: 0px;
     margin: 5px;
@@ -52,7 +113,11 @@ button[class^='read'] {
     align-items: center;
     justify-content: center;
 }
-[class^='card'] button:hover {
+.card button:hover {
     opacity: 0.7;
 }
 
+.footer {
+    position: fixed;
+    bottom: 0px;
+}
