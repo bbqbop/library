@@ -34,6 +34,7 @@ document.addEventListener('submit', (e)=>{
 })
 
 let myLibrary = [];
+let primaryKey = 0;
 class Book{
     constructor(title, author, read){
         this.title = title;
@@ -42,16 +43,17 @@ class Book{
         this.addToLibrary();
     }
     info = () => {
-        return `<textarea class="inpTitle">${this.title}</textarea> by 
-                <textarea class="inpAuthor">${this.author}</textarea> <span>${this.isRead()}</span>`;
+        return `<textarea class="inpTitle" data-idx=${this.idx}>${this.title}</textarea> by 
+                <textarea class="inpAuthor" data-idx=${this.idx}>${this.author}</textarea> <span>${this.isRead()}</span>`;
     }
     isRead = () => {
         return this.read ? 'Finished reading' : 'Currently reading'
     }
     addToLibrary = () => {
         myLibrary.push(this);
-        this.idx = myLibrary.indexOf(this);
+        this.idx = primaryKey;
         this.createCard();
+        primaryKey++;
     }
     createCard = () => {
         let newCard = document.createElement('div');
@@ -77,6 +79,7 @@ class Book{
         display.append(newCard);
         newCard.append(eraseBtn);
         newCard.append(readBtn);
+        this.updateEntry();
     }
     removeEntry = (idx) => {
         myLibrary.splice(myLibrary.indexOf(this),1);
@@ -85,10 +88,21 @@ class Book{
     toggleRead = (idx) => {
         this.read = !this.read;
         let span = document.querySelector(`[data-idx="${idx}"] span`);
-        console.log(span);
         let btn = document.querySelector(`[data-idx="${idx}"] .read`)
         btn.innerHTML = this.read ? '&#128214;' : '&#128213;'
         span.textContent = this.isRead();
+    }
+    updateEntry = () => {
+        const inpTitle = document.querySelector(`.inpTitle[data-idx="${this.idx}"]`);
+        const inpAuthor = document.querySelector(`.inpAuthor[data-idx="${this.idx}"]`)
+        inpTitle.addEventListener('change', (e)=>{
+            this.title = e.target.value
+            console.log(this)
+        })
+        inpAuthor.addEventListener('change', (e)=>{
+            this.author = e.target.value
+            console.log(this)
+        })
     }
 }
 
