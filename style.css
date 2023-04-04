@@ -4,6 +4,26 @@
     box-sizing: border-box;
     --shadow : 0 2px 4px;
     --color : antiquewhite;
+    --comp : #d7e6fa;
+    --dark : rgb(75, 70, 64);
+    color: var(--dark);
+    font-family: monospace;
+}
+
+button {
+    border-radius: 50%;
+    border: solid 1px;
+    box-shadow: var(--shadow);
+    transition: all 350ms;
+    background-color: var(--comp);
+    opacity: 0.8;
+}
+
+button:hover {
+    opacity: 1;
+}
+button:active {
+    box-shadow: none;
 }
 
 .wrapper {
@@ -11,24 +31,38 @@
     grid-template-rows: 75px 1fr 30px;
 }
 
+.header {
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: center;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    max-width: 800px;
+    margin: 10px 35px
+}
+
+.header h1 {
+    font-size: 45px;
+    letter-spacing: -0.15em;
+    text-shadow: var(--shadow) var(--color);
+}
+
 .open-form {
     z-index: 2;
     position: fixed;
-    right: 10px;
+    right: 35px;
     height: 50px;
     width: 50px;
     border-radius: 50%;
     border: solid 1px;
-    background-color: var(--color);
     box-shadow: var(--shadow);
     transition: all 350ms;
-    background-color: --color;
-}
-.open-form:hover {
+    background-color: var(--comp);
     opacity: 0.8;
-}
-.open-form:active {
-    box-shadow: none;
 }
 
 form.add-book {
@@ -41,7 +75,8 @@ form.add-book {
     gap: 10px;
     transform: scale(0);
     transition: all 350ms;
-    background-color: #524D46;
+    background-color: var(--comp);
+    color: var(--dark);
 }
 form input {
     display: block;
@@ -49,6 +84,7 @@ form input {
 
 .main{
     position: relative;
+    background-color: rgb(75, 70, 64, 0.2);
 }
 
 .display {
@@ -63,7 +99,7 @@ form input {
     font-size: 15px;
     text-align: center;
     width: 200px;
-    background-color: --color;
+    background-color: var(--color);
     border-radius: 3px;
     box-shadow: var(--shadow);
     display: flex;
@@ -74,6 +110,8 @@ form input {
 }
 
 .card textarea {
+    position: relative;
+    top:10px;
     background-color: inherit;
     font-family: inherit;
     font-size: inherit;
@@ -85,12 +123,17 @@ form input {
     overflow: hidden;
 }
 
+.card textarea:focus {
+    outline: var(--dark);
+    background-color: #fff;
+}
+
 .card .inpTitle {
     font-size: 30px;
 }
 
 .card span {
-    margin: 5px;
+    margin: 25px;
     font-size: 12px;
 }
 button.read {
@@ -103,18 +146,18 @@ button.read {
     padding: 10px;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
     font-size: 18px;
     align-self: flex-end;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.card button:hover {
-    opacity: 0.7;
-}
 
 .footer {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
     position: fixed;
     bottom: 0px;
+    margin: 5px;
 }

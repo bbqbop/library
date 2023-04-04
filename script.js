@@ -2,39 +2,38 @@ const display = document.querySelector('.display');
 const openForm = document.querySelector('.open-form');
 const form = document.querySelector('form');
 const elementsToBlur = document.querySelectorAll('.header, .main');
-
-openForm.addEventListener('click', () => {
+const toggleForm = function() {
     if (openForm.textContent === "+"){
-        openForm.textContent = "-"
-        elementsToBlur.forEach(element => {
-            element.style.filter = "blur(5px)";
-          });
-        form.style.transform = "scale(1)"
-        form.style.opacity = "1"
-    } 
-    else {
-        openForm.textContent = "+"
-        form.style.transform = "scale(0)"
-        elementsToBlur.forEach(element => {
-            element.style.removeProperty('filter')
-        })
-    }
+            openForm.textContent = "-"
+            elementsToBlur.forEach(element => {
+                element.style.filter = "blur(5px)";
+            });
+            form.style.transform = "scale(1)"
+            form.style.opacity = "1"
+        } 
+        else {
+            openForm.textContent = "+"
+            form.style.transform = "scale(0)"
+            elementsToBlur.forEach(element => {
+                element.style.removeProperty('filter')
+            })
+        }
+}
+
+openForm.addEventListener('click', toggleForm)
+document.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    let title = e.target[1].value;
+    let author = e.target[2].value;
+    let read = e.target[3].checked;
+    let bookEntry = new Book(title, author, read)
+    e.target[1].value = '';
+    e.target[2].value = '';
+    e.target[3].checked = false;
+    toggleForm();
 })
 
 let myLibrary = [];
-
-document.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    let title = e.target[0].value;
-    let author = e.target[1].value;
-    let read = e.target[2].checked;
-    let bookEntry = new Book(title, author, read)
-    e.target[0].value = '';
-    e.target[1].value = '';
-    e.target[2].checked = false;
-
-})
-
 class Book{
     constructor(title, author, read){
         this.title = title;
@@ -47,7 +46,7 @@ class Book{
                 <textarea class="inpAuthor">${this.author}</textarea> <span>${this.isRead()}</span>`;
     }
     isRead = () => {
-        return this.read ? 'already read' : 'not read yet'
+        return this.read ? 'Finished reading' : 'Currently reading'
     }
     addToLibrary = () => {
         myLibrary.push(this);
@@ -63,7 +62,8 @@ class Book{
         newCard.innerHTML = this.info();
         eraseBtn.classList.add(`erase`)
         eraseBtn.setAttribute("data-idx",`${this.idx}`)
-        eraseBtn.textContent = 'x'
+        eraseBtn.textContent = '+'
+        eraseBtn.style.transform = 'rotate(-45deg)'
         eraseBtn.addEventListener('click', (e)=>{
             this.removeEntry(parseInt(e.target.getAttribute('data-idx')))
         })
@@ -85,15 +85,10 @@ class Book{
     toggleRead = (idx) => {
         this.read = !this.read;
         let span = document.querySelector(`[data-idx="${idx}"] span`);
+        console.log(span);
         let btn = document.querySelector(`[data-idx="${idx}"] .read`)
-        if(myLibrary[idx].read) {
-            btn.innerHTML = '&#128214;'
-            span.textContent = 'already read'
-        }
-        else {
-            btn.innerHTML = '&#128213;';
-            span.textContent = 'not read yet'
-        }
+        btn.innerHTML = this.read ? '&#128214;' : '&#128213;'
+        span.textContent = this.isRead();
     }
 }
 
