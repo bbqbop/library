@@ -11,11 +11,8 @@
     grid-template-rows: 75px 1fr 30px;
 }
 
-:not(.menu){
-    background-color: blue;
-}
-
 .open-form {
+    z-index: 2;
     position: fixed;
     right: 10px;
     height: 50px;
@@ -42,9 +39,9 @@ form.add-book {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    opacity: 1;
     transform: scale(0);
     transition: all 350ms;
+    background-color: #524D46;
 }
 form input {
     display: block;
