@@ -97,13 +97,40 @@ class Book{
         const inpAuthor = document.querySelector(`.inpAuthor[data-idx="${this.idx}"]`)
         inpTitle.addEventListener('change', (e)=>{
             this.title = e.target.value
-            console.log(this)
         })
         inpAuthor.addEventListener('change', (e)=>{
             this.author = e.target.value
-            console.log(this)
         })
     }
 }
 
+// drag openForm Button
+
+let isDown = false;
+openForm.addEventListener('mousedown', (e) => {
+    isDown = true;
+})
+document.addEventListener('mouseup', (e) => {
+    isDown = false;
+})
+document.addEventListener('mousemove', (e) => {
+    if (isDown) {
+        console.log(e)
+        let posX = e.clientX;
+        let posY = e.clientY;
+        if(posX >= window.innerWidth - 50){
+            posX = window.innerWidth - 50;
+        }
+        if(posY >= window.innerHeight - 50){
+            posY = window.innerHeight - 50;
+        }
+        if(posY <= 0){
+            posY = 0
+        }
+        let rect = openForm.getBoundingClientRect();
+        openForm.style.left = posX + 'px';
+        openForm.style.top = posY + 'px';
+    }
+
+})
 
