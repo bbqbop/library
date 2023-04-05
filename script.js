@@ -25,29 +25,41 @@ document.addEventListener('submit', (e)=>{
     e.preventDefault();
     let title = e.target[1].value;
     let author = e.target[2].value;
-    let read = e.target[3].checked;
-    let bookEntry = new Book(title, author, read)
+    let length = e.target[3].value;
+    let read = e.target[4].checked;
+    let bookEntry = new Book(title, author, length, read)
     e.target[1].value = '';
     e.target[2].value = '';
-    e.target[3].checked = false;
+    e.target[3].value = '';
+    e.target[4].checked = false;
     toggleForm();
 })
 
 let myLibrary = [];
 let primaryKey = 0;
 class Book{
-    constructor(title, author, read){
+    constructor(title, author, length, read){
         this.title = title;
         this.author = author;
+        this.length = length ? parseInt(length) : 0;
         this.read = read;
         this.addToLibrary();
     }
     info = () => {
-        return `<textarea class="inpTitle" data-idx=${this.idx}>${this.title}</textarea> by 
-                <textarea class="inpAuthor" data-idx=${this.idx}>${this.author}</textarea> <span>${this.isRead()}</span>`;
+        return `<textarea class="inpTitle" data-idx=${this.idx}>${this.title}</textarea> 
+                by 
+                <textarea class="inpAuthor" data-idx=${this.idx}>${this.author}</textarea> 
+                <div class="inpLength" data-idx=${this.idx}><input type="number" value="${this.length}"><span>pages</span></div> 
+                <span>${this.isRead()}</span>`;
     }
     isRead = () => {
         return this.read ? 'Finished reading' : 'Currently reading'
+    }
+    isLength = (element) => {
+        let span = element.lastChild
+        if(this.length){
+            span.style.display = 'inline'
+        } else span.style.display = 'none'
     }
     addToLibrary = () => {
         myLibrary.push(this);
@@ -94,13 +106,19 @@ class Book{
     }
     updateEntry = () => {
         const inpTitle = document.querySelector(`.inpTitle[data-idx="${this.idx}"]`);
-        const inpAuthor = document.querySelector(`.inpAuthor[data-idx="${this.idx}"]`)
+        const inpAuthor = document.querySelector(`.inpAuthor[data-idx="${this.idx}"]`);
+        const inpLength = document.querySelector(`.inpLength[data-idx="${this.idx}"]`);
         inpTitle.addEventListener('change', (e)=>{
             this.title = e.target.value
         })
         inpAuthor.addEventListener('change', (e)=>{
             this.author = e.target.value
         })
+        inpLength.firstElementChild.addEventListener('change', (e) => {
+            this.length = parseInt(e.target.value);
+            this.isLength(inpLength)
+        })
+        this.isLength(inpLength)
     }
 }
 
@@ -115,7 +133,6 @@ document.addEventListener('mouseup', (e) => {
 })
 document.addEventListener('mousemove', (e) => {
     if (isDown) {
-        console.log(e)
         let posX = e.clientX;
         let posY = e.clientY;
         if(posX >= window.innerWidth - 50){

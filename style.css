@@ -159,7 +159,20 @@ form input[type="checkbox"] {
     font-size: 30px;
 }
 
-.card span {
+.card .inpLength input {
+    background-color: inherit;
+    border: none;
+    width: 6ch;
+    display: inline-block;
+    text-align: right;
+    margin: 0;
+}
+
+.inpLength>span {
+    display: none;
+}
+
+.card > span {
     margin: 25px;
     font-size: 12px;
 }
