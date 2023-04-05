@@ -25,9 +25,9 @@ document.addEventListener('submit', (e)=>{
     e.preventDefault();
     let title = e.target[1].value;
     let author = e.target[2].value;
-    let length = e.target[3].value;
+    let pages = e.target[3].value;
     let read = e.target[4].checked;
-    let bookEntry = new Book(title, author, length, read)
+    let bookEntry = new Book(title, author, pages, read)
     e.target[1].value = '';
     e.target[2].value = '';
     e.target[3].value = '';
@@ -38,10 +38,10 @@ document.addEventListener('submit', (e)=>{
 let myLibrary = [];
 let primaryKey = 0;
 class Book{
-    constructor(title, author, length, read){
+    constructor(title, author, pages, read){
         this.title = title;
         this.author = author;
-        this.length = length ? parseInt(length) : 0;
+        this.pages = pages ? parseInt(pages) : 0;
         this.read = read;
         this.addToLibrary();
     }
@@ -49,15 +49,15 @@ class Book{
         return `<textarea class="inpTitle" data-idx=${this.idx}>${this.title}</textarea> 
                 by 
                 <textarea class="inpAuthor" data-idx=${this.idx}>${this.author}</textarea> 
-                <div class="inpLength" data-idx=${this.idx}><input type="number" value="${this.length}"><span>pages</span></div> 
-                <span>${this.isRead()}</span>`;
+                <div class="inpPages" data-idx=${this.idx}><input type="number" value="${this.pages}"><span>pages</span></div> 
+                <span data-idx=${this.idx}>${this.isRead()}</span>`;
     }
     isRead = () => {
         return this.read ? 'Finished reading' : 'Currently reading'
     }
-    isLength = (element) => {
+    isPages = (element) => {
         let span = element.lastChild
-        if(this.length){
+        if(this.pages){
             span.style.display = 'inline'
         } else span.style.display = 'none'
     }
@@ -99,26 +99,29 @@ class Book{
     }
     toggleRead = (idx) => {
         this.read = !this.read;
-        let span = document.querySelector(`[data-idx="${idx}"] span`);
+        let span = document.querySelector(`span[data-idx="${idx}"]`);
         let btn = document.querySelector(`[data-idx="${idx}"] .read`)
         btn.innerHTML = this.read ? '&#128214;' : '&#128213;'
         span.textContent = this.isRead();
+        updateStats()
     }
     updateEntry = () => {
         const inpTitle = document.querySelector(`.inpTitle[data-idx="${this.idx}"]`);
         const inpAuthor = document.querySelector(`.inpAuthor[data-idx="${this.idx}"]`);
-        const inpLength = document.querySelector(`.inpLength[data-idx="${this.idx}"]`);
+        const inpPages = document.querySelector(`.inpPages[data-idx="${this.idx}"]`);
         inpTitle.addEventListener('change', (e)=>{
             this.title = e.target.value
         })
         inpAuthor.addEventListener('change', (e)=>{
             this.author = e.target.value
         })
-        inpLength.firstElementChild.addEventListener('change', (e) => {
-            this.length = parseInt(e.target.value);
-            this.isLength(inpLength)
+        inpPages.firstElementChild.addEventListener('change', (e) => {
+            this.pages = parseInt(e.target.value);
+            this.isPages(inpPages)
+            updateStats()
         })
-        this.isLength(inpLength)
+        this.isPages(inpPages);
+        updateStats();
     }
 }
 
@@ -148,6 +151,23 @@ document.addEventListener('mousemove', (e) => {
         openForm.style.left = posX + 'px';
         openForm.style.top = posY + 'px';
     }
-
 })
 
+// header STATS
+
+function updateStats(){
+    const stats = document.querySelector('div.stats')
+    let booksRead = 0;
+    let pagesRead = 0;
+    myLibrary.forEach(entry => {
+        if(entry.read) {
+            booksRead++
+            pagesRead += entry.pages
+        }
+        
+    })
+    stats.innerText = `${myLibrary.length} books
+                         ${booksRead} finished
+                         ${myLibrary.length - booksRead} currently reading
+                         ${pagesRead} pages read in total`
+}
